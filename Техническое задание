@@ -1,0 +1,104 @@
+Техническое задание: Бизнес модель для управления рейсами и компаниями
+Введение
+Цель данного технического задания — разработка бизнес модели для управления рейсами (TripDTO) и компаниями (CompanyDTO) с отношением один ко многим. Это означает, что одна компания может иметь множество рейсов.
+Описание сущностей
+TripDTO
+java
+
+
+public class TripDTO {
+    private long id;
+    private int company;
+    private String plane;
+    private String town_from;
+    private String town_to;
+    private Date time_out;
+    private Date time_in;
+}
+CompanyDTO
+java
+
+
+public class CompanyDTO {
+    private long id;
+    private String name;
+}
+Требования
+Отношение один ко многим
+Одна компания (CompanyDTO) может иметь множество рейсов (TripDTO).
+В каждом рейсе (TripDTO) должно быть поле company, которое будет ссылаться на идентификатор компании (CompanyDTO).
+База данных
+Необходимо создать две таблицы в базе данных: companies и trips.
+Таблица companies должна содержать поля id и name.
+Таблица trips должна содержать поля id, company_id, plane, town_from, town_to, time_out, time_in.
+Связи
+В таблице trips поле company_id должно быть внешним ключом, ссылающимся на поле id в таблице companies.
+Пример реализации
+Модель CompanyDTO
+java
+
+
+public class CompanyDTO {
+    private long id;
+    private String name;
+
+    // Getters and Setters
+}
+Модель TripDTO
+java
+
+
+public class TripDTO {
+    private long id;
+    private int company;
+    private String plane;
+    private String town_from;
+    private String town_to;
+    private Date time_out;
+    private Date time_in;
+
+    // Getters and Setters
+}
+Создание таблиц в базе данных
+sql
+
+
+CREATE TABLE companies (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE trips (
+    id BIGINT PRIMARY KEY,
+    company_id BIGINT,
+    plane VARCHAR(255),
+    town_from VARCHAR(255),
+    town_to VARCHAR(255),
+    time_out TIMESTAMP,
+    time_in TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES companies(id)
+);
+Пример использования
+Создание компании:
+java
+
+
+CompanyDTO company = new CompanyDTO();
+company.setId(1);
+company.setName("Airways Inc.");
+// Сохранение компании в базу данных
+Создание рейса:
+java
+
+
+TripDTO trip = new TripDTO();
+trip.setId(101);
+trip.setCompany(1); // Ссылка на компанию с id 1
+trip.setPlane("Boeing 737");
+trip.setTown_from("New York");
+trip.setTown_to("Los Angeles");
+trip.setTime_out(new Date());
+trip.setTime_in(new Date());
+// Сохранение рейса в базу данных
+Заключение
+Данная бизнес модель позволяет эффективно управлять рейсами и компаниями, обеспечивая четкую структуру данных и связи между ними.
